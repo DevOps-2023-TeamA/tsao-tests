@@ -3,13 +3,14 @@ Library           SeleniumLibrary
 
 *** Variables ***
 ${BROWSER}        chrome
-${URL}            http://google.com
+${URL}            http://localhost:8080
 @{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
 
 *** Test Cases ***
-Open Website And Print Title
+Open Website
     Open Browser
     Go To Site
+    Title Should Be    TSA Office Records Systems
     [Teardown]  Close Browser
 
 *** Keywords ***
