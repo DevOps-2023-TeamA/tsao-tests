@@ -2,24 +2,38 @@
 Library           SeleniumLibrary
 
 *** Variables ***
-${BROWSER}        chrome
 ${URL}            http://localhost:8080
 @{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
+@{FIREFOX_OPTIONS}  headless  disable-gpu  window-size=1920,1080
 
 *** Test Cases ***
 Open Website
-    Open Browser
+    Open Browser    ${browser}
     Go To Site
     Title Should Be    TSA Office Records Systems
     [Teardown]  Close Browser
 
 *** Keywords ***
 Open Browser
-    ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
+    [Arguments]    ${browser}=chrome
+    ${options}=    Evaluate    sys.modules['selenium.webdriver'].${browser.capitalize()}Options()    sys, selenium.webdriver
+    ${browser_options}=    Run Keyword If    '${browser}' == 'chrome'    Set Chrome Options    ${options}
+    ...    ELSE IF    '${browser}' == 'firefox'    Set Firefox Options    ${options}
+    Create Webdriver    ${browser.capitalize()}    options=${browser_options}
+
+Set Chrome Options
+    [Arguments]    ${options}
     FOR    ${arg}    IN    @{CHROME_OPTIONS}
         Call Method    ${options}    add_argument    ${arg}
     END
-    Create Webdriver    Chrome    options=${options}
+    [Return]    ${options}
+
+Set Firefox Options
+    [Arguments]    ${options}
+    FOR    ${arg}    IN    @{FIREFOX_OPTIONS}
+        Call Method    ${options}    add_argument    ${arg}
+    END
+    [Return]    ${options}
 
 Go To Site
     Go To    ${URL}
