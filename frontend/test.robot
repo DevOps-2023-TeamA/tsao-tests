@@ -1,18 +1,24 @@
 *** Settings ***
-Library    SeleniumLibrary
+Library           SeleniumLibrary
+
+*** Variables ***
+${BROWSER}        chrome
+${URL}            http://google.com
+@{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
 
 *** Test Cases ***
-URL Test
-    Open Headless Chrome Browser
-    Open Browser    https://google.com    Google Chrome
-    Title Should Be    Google
-    Close Browser
+Open Website And Print Title
+    Open Browser
+    Go To Site
+    [Teardown]  Close Browser
 
 *** Keywords ***
-Open Headless Chrome Browser
+Open Browser
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
-    Call Method    ${options}    add_argument    --headless
-    Call Method    ${options}    add_argument    --no-sandbox
-    Call Method    ${options}    add_argument    --disable-dev-shm-usage
+    FOR    ${arg}    IN    @{CHROME_OPTIONS}
+        Call Method    ${options}    add_argument    ${arg}
+    END
     Create Webdriver    Chrome    options=${options}
-    Set Window Size    1920    1080
+
+Go To Site
+    Go To    ${URL}
