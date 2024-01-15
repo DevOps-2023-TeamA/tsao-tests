@@ -11,6 +11,7 @@ Open Website
     Open Browser    ${browser}
     Go To Site
     Title Should Be    TSA Office Records Systems
+    Capture Page Screenshot
     [Teardown]  Close Browser
 
 *** Keywords ***
