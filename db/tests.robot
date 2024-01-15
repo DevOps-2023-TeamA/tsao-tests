@@ -8,7 +8,7 @@ ${DB_PORT}  3306
 *** Test Cases ***
 Check tsao_accounts Table Exists
     [Setup]  Connect to DB
-    Row Count Is Equal To X     SELECT * FROM tsao_accounts    5
+    Table Must Exist    tsao_accounts
 
 *** Keywords ***
 Connect to DB
