@@ -2,7 +2,7 @@
 Library  DatabaseLibrary
 
 *** Variables ***
-${DB_TYPE}  mysql-connector-python
+${DB_TYPE}  pymysql
 ${DB_SERVER}  localhost
 ${DB_PORT}  3306
 
