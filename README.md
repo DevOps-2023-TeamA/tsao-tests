@@ -1,6 +1,7 @@
 # tsao tests
 ## contents
 - [database testing setup](#database-testing-setup)
+- [backend testing setup](#backend-testing-setup)
 - [frontend testing setup](#frontend-testing-setup)
 
 ## database testing setup
@@ -21,13 +22,16 @@ robot -v DB_NAME:tsao -v DB_USER:{USERNAME} -v DB_PASSWORD:{PASSWORD} tests.robo
 > 
 > Consider adding the `--outputdir` flag to pass in an output directory.
 
+## backend testing setup
+Not currently set up.
+
 ## frontend testing setup
 ```sh
 pip install robotframework
 pip install robotframework-seleniumlibrary
 ```
 
-## testing
+### testing
 Deploy the frontend site onto `localhost:8080`.
 > ⚠️ You will need the backend and database to be set up.
 > - Frontend tests will not work without the full stack set up.
