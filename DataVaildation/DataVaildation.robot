@@ -8,10 +8,11 @@ ${DB_SERVER}     localhost
 ${DB_PORT}       3306
 ${DB_NAME}       tsao
 ${DB_USER}       root
-${DB_PASSWORD}   Guojun@00
+${DB_PASSWORD}   Pa$$w0rd
 
 *** Test Cases ***
 Check tsao_accounts Table Exists
+    [Documentation]    Verify that tsao_accounts table exist.
     [Setup]    Connect to DB
     Table Must Exist    tsao_accounts
     [Teardown]    Disconnect From Database
@@ -89,6 +90,29 @@ Verify DefaultValues
     Run Keyword If    ${default_values}    Verify IsApproved and IsDeleted Default Values    ${default_values}
     Run Keyword If    not ${default_values}    Fail    No default values found for the 'IsApproved' and 'IsDeleted' columns
 
+    [Teardown]    Disconnect From Database
+
+Check If Exists In DB
+    [Documentation]    Verify that specific data exist in database.
+    [Setup]    Connect to DB
+    Check If Exists In Database    SELECT ID FROM tsao_accounts WHERE Name = 'Ben Low';
+    [Teardown]    Disconnect From Database
+
+Check If Not Exists In DB
+    [Documentation]    Verify that specific data does not exist in database.
+    [Setup]    Connect to DB
+    Check If Not Exists In Database    SELECT ID FROM tsao_records WHERE ContactRole = 'Lecturer';
+    [Teardown]    Disconnect From Database
+
+Verify Query - Row Count tsao_accounts table
+    [Documentation]    Verify the row count of tsao_accounts table.
+    [Setup]    Connect to DB
+    ${output} =    Query    SELECT COUNT(*) FROM tsao_accounts;
+    Log    ${output}
+    ${val}=    Get from list    ${output}    0
+    ${val}=    Convert to list    ${val}
+    ${val}=    Get from list    ${val}    0
+    Should be equal as Integers    ${val}    5
     [Teardown]    Disconnect From Database
 
 # Add more test cases based on the list provided earlier...
