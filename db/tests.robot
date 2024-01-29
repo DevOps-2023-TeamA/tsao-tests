@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation       Tests which work with the same input params across all databases.
 Library  DatabaseLibrary
 Library    Collections
 
@@ -7,37 +8,149 @@ ${DB_SERVER}  localhost
 ${DB_PORT}  3306
 
 *** Test Cases ***
-Check tsao_accounts Table Exists
-    [Documentation]    Verify that the 'tsao_accounts' table exists in the database.
+Verify SQL Statement Ending With Semicolon Works
+    [Documentation]    Verify that query with semicolon works.
+    [Setup]    Connect to DB
+    Query    SELECT * FROM tsao_accounts;
+    [Teardown]    Disconnect From Database
+
+Verify SQL Statement Ending Without Semicolon Works
+    [Documentation]    Verify that query without semicolon works.
+    [Setup]    Connect to DB
+    Query    SELECT * FROM tsao_accounts
+    [Teardown]    Disconnect From Database
+
+Check If tsao_accounts Table Exists
+    [Documentation]    Verify that tsao_accounts table exist.
     [Setup]    Connect to DB
     Table Must Exist    tsao_accounts
     [Teardown]    Disconnect From Database
 
-Insert Data into tsao_account Table
-    [Documentation]    Test to INSERT data into 'tsao_accounts' table.
+Insert Data into tsao_accounts Table
+    [Documentation]    Test to INSERT data into tsao_accounts table.
     [Setup]    Connect to DB
     ${output} =    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (6, 'Steve Jobs', 'sj1955', 'f223faa96f22916294922b171a2696d868fd1f9129302eb41a45b2a2ea2ebbfd', 'User', '2024-01-22 12:34:56', true, false);
     Log    ${output}
     Should Be Equal As Strings    ${output}    None
     [Teardown]    Disconnect From Database
 
-Update Data in tsao_account Table
-    [Documentation]    Test to UPDATE data in 'tsao_accounts' table.
+Update Data in tsao_accounts Table
+    [Documentation]    Test to UPDATE data into tsao_accounts table.
     [Setup]    Connect to DB
     ${output} =    Execute SQL String    UPDATE tsao_accounts SET Username = 'sj55', Role= 'Administrator' WHERE ID = 6;   
     Log    ${output}
     Should Be Equal As Strings    ${output}    None
     [Teardown]    Disconnect From Database
 
-Delete Data in tsao_account Table
-    [Documentation]    Test to DELETE data from 'tsao_accounts' table.
+Delete Data in tsao_accounts Table
+    [Documentation]    Test to DELETE data into tsao_accounts table.
     [Setup]    Connect to DB
-    ${output} =    Execute SQL String    DELETE FROM tsao_accounts WHERE ID=6;   
+    ${output} =    Execute SQL String    DELETE FROM tsao_accounts WHERE ID = 6;   
     Log    ${output}
     Should Be Equal As Strings    ${output}    None
     [Teardown]    Disconnect From Database
 
-Verify Columns Existence
+Select tsao_records Table With Multiple Rows
+    [Documentation]  Test to SELECT multiple rows of data in tsao_records table.  
+    [Setup]    Connect to DB
+    ${output}=    Query    SELECT CompanyPO from tsao_records
+    Length Should Be    ${output}    3
+    Should Be Equal    ${output}[0][0][0]    Er
+    Should Be Equal    ${output}[1][0]    Ben
+    Should Be Equal    ${output}[2][0]    John
+    [Teardown]    Disconnect From Database
+
+Check If Data Exists In tsao_accounts Table
+    [Documentation]    Verify that specific data exist in database.
+    [Setup]    Connect to DB
+    Check If Exists In Database    SELECT ID FROM tsao_accounts WHERE Name = 'Ben Low';
+    [Teardown]    Disconnect From Database
+
+Check If Data Do Not Exists In tsao_accounts Table
+    [Documentation]    Verify that specific data does not exist in database.
+    [Setup]    Connect to DB
+    Check If Not Exists In Database    SELECT ID FROM tsao_records WHERE ContactRole = 'Lecturer';
+    [Teardown]    Disconnect From Database
+
+Check Contact Role Values of tsao_records Table
+    [Documentation]    Verify that 'ContactRole' values in 'tsao_records' are either 'Staff' or 'Student'.
+    [Setup]    Connect to DB
+    ${invalid_contact_roles} =    Query    SELECT ContactRole FROM tsao_records WHERE ContactRole NOT IN ('Staff', 'Student')
+    Run Keyword If    ${invalid_contact_roles}    Fail    Invalid 'ContactRole' values found in 'tsao_records': ${invalid_contact_roles}
+    [Teardown]    Disconnect From Database
+
+Verify Row Count of tsao_records Table is Equal to X
+    [Documentation]    Verify the row count of tsao_records table is equal to X value.
+    [Setup]    Connect to DB
+    Row Count is Equal to X    SELECT ID FROM tsao_records    3
+    [Teardown]    Disconnect From Database
+
+Verify Row Count of tsao_accounts Table is Less Than X
+    [Documentation]    Verify the row count of tsao_accounts table is less than X value.
+    [Setup]    Connect to DB
+    Row Count is Less Than X    SELECT ID FROM tsao_accounts    6
+    [Teardown]    Disconnect From Database
+
+Verify Row Count of tsao_records Table is Greater Than X
+    [Documentation]    Verify the row count of tsao_records table is greater than X value.
+    [Setup]    Connect to DB
+    Row Count is Greater Than X    SELECT ID FROM tsao_records    2
+    [Teardown]    Disconnect From Database
+
+Retrieve Row Count of tsao_records Table
+    [Documentation]    Test to retrieve the row count of tsao_records table and verify as string value.
+    [Setup]    Connect to DB
+    ${output}=    Row Count    SELECT ID FROM tsao_records
+    Log    ${output}
+    Should Be Equal As Strings    ${output}    3
+    [Teardown]    Disconnect From Database
+
+Retrieve records from tsao_records Table
+    [Documentation]   Test to Rretrieve the records from tsao_records table.
+    [Setup]    Connect to DB
+    ${output}=    Execute SQL String    SELECT * FROM tsao_records
+    Log    ${output}
+    Should Be Equal As Strings    ${output}    None
+    [Teardown]    Disconnect From Database
+
+Verify Query - Row Count tsao_accounts Table
+    [Documentation]    Verify the row count of tsao_accounts table.
+    [Setup]    Connect to DB
+    ${output}=    Query    SELECT COUNT(*) FROM tsao_accounts
+    Log    ${output}
+    Should Be Equal As Integers    ${output}[0][0]    5
+    [Teardown]    Disconnect From Database
+
+Verify Query - Row Count tsao_records Table
+    [Documentation]    Verify the row count of tsao_records table.
+    [Setup]    Connect to DB
+    ${output}=    Query    SELECT COUNT(*) FROM tsao_records
+    Log    ${output}
+    Should Be Equal As Integers    ${output}[0][0]    3
+    [Teardown]    Disconnect From Database
+
+Verify Query - Get results as a list of dictionaries from tsao_accounts Table
+    [Documentation]    Test to get result as a list of dictionaries from tsao_accounts table.
+    [Setup]    Connect to DB
+    ${output}=    Query    SELECT * FROM tsao_accounts    returnAsDict=True
+    Log    ${output}
+    # some databases lower field names and you can't do anything about it
+    TRY
+        ${value 1}=    Get From Dictionary    ${output}[0]    Name
+    EXCEPT    Dictionary does not contain key 'Name'.
+        ${value 1}=    Get From Dictionary    ${output}[0]    Name
+    END
+    TRY
+        ${value 2}=    Get From Dictionary    ${output}[1]    Name
+    EXCEPT    Dictionary does not contain key 'FIRST_NAME'.
+        ${value 2}=    Get From Dictionary    ${output}[1]    Name
+    END
+    Should Be Equal As Strings    ${value 1}    Ben Low
+    Should Be Equal As Strings    ${value 2}    Er Pooi Voon
+    [Teardown]    Disconnect From Database
+
+#GJ
+Verify Columns Existence in tsao_accounts Table
     [Documentation]    Verify that all columns exist in the 'tsao_accounts' table.
     [Setup]    Connect to DB
     ${columns}    Query    SHOW COLUMNS FROM tsao_accounts
@@ -55,23 +168,10 @@ Verify Columns Existence
     List Should Contain Value    ${column_names}    IsDeleted
     [Teardown]    Disconnect From Database
 
-Verify PrimaryKey
-    [Documentation]    Verify the primary key and auto-increment for the 'ID' column.
-    [Setup]    Connect to DB
-    ${id_attributes}    Query    SHOW COLUMNS FROM tsao_accounts WHERE Field='ID'
-    ${attribute_info}    Set Variable    ${id_attributes[0]}
-    ${attribute_list}    Create List    ${attribute_info[3]}
-    List Should Contain Value    ${attribute_list}    PRI
-    ${auto_increment}    Set Variable If    '${attribute_info[5]}' != 'NO'    ${attribute_info[5]}    NOT FOUND
-    Should Not Be Equal As Strings    ${auto_increment}    NOT FOUND
-    Should Not Be Equal As Strings    ${auto_increment}    NO
-    [Teardown]    Disconnect From Database
-
-Verify ColumnDataTypes
-    [Documentation]    Verify the data types of each column.
+Verify Column Data Types of tsao_accounts Table
+    [Documentation]    Verify the data types of each column of tsao_accounts table.
     [Setup]    Connect to DB
     ${data_types}    Query    SHOW COLUMNS FROM tsao_accounts
-
     FOR    ${column_info}    IN    @{data_types}
         ${column_data_type}    Set Variable    ${column_info[1]}
         Log    Column Data Type: ${column_data_type}
@@ -84,126 +184,87 @@ Verify ColumnDataTypes
         Run Keyword    Verify Data Type Contains    ${column_data_type.lower()}    bool
         Run Keyword    Verify Data Type Contains    ${column_data_type.lower()}    bool
     END
-
     [Teardown]    Disconnect From Database
 
-Verify UniqueConstraint
-    [Documentation]    Verify the unique constraint on the 'Username' column.
+Verify Primary Key of tsao_accounts Table
+    [Documentation]    Verify the primary key and auto-increment for the 'ID' column of tsao_accounts table.
     [Setup]    Connect to DB
-    ${unique_constraint}    Query    SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_name = 'tsao_accounts' AND column_name = 'Username' AND non_unique = 0
-
-    Run Keyword If    ${unique_constraint[0][0]} > 0    Log    Unique constraint exists for the 'Username' column
-    Run Keyword If    ${unique_constraint[0][0]} == 0    Fail    No unique constraint found for the 'Username' column
-
+    ${id_attributes}    Query    SHOW COLUMNS FROM tsao_accounts WHERE Field='ID'
+    ${attribute_info}    Set Variable    ${id_attributes[0]}
+    ${attribute_list}    Create List    ${attribute_info[3]}
+    List Should Contain Value    ${attribute_list}    PRI
+    ${auto_increment}    Set Variable If    '${attribute_info[5]}' != 'NO'    ${attribute_info[5]}    NOT FOUND
+    Should Not Be Equal As Strings    ${auto_increment}    NOT FOUND
+    Should Not Be Equal As Strings    ${auto_increment}    NO
     [Teardown]    Disconnect From Database
 
-Verify EnumValues
-    [Documentation]    Verify that the 'Role' column only accepts values 'Administrator' and 'User'.
-    [Setup]    Connect to DB
-    ${enum_values}    Query    SELECT DISTINCT Role FROM tsao_accounts
-    List Should Contain Value    ${enum_values[0]}    Administrator
-    List Should Contain Value    ${enum_values[1]}    User
-    [Teardown]    Disconnect From Database
-
-Verify DefaultValues
-    [Documentation]    Verify default values for 'IsApproved' and 'IsDeleted'.
-    [Setup]    Connect to DB
-    ${default_values}    Query    SELECT IsApproved, IsDeleted FROM tsao_accounts WHERE ID=1
-
-    Run Keyword If    ${default_values}    Verify IsApproved and IsDeleted Default Values    ${default_values}
-    Run Keyword If    not ${default_values}    Fail    No default values found for the 'IsApproved' and 'IsDeleted' columns
-
-    [Teardown]    Disconnect From Database
-
-Check If Exists In DB
-    [Documentation]    Verify that specific data exists in the database.
-    [Setup]    Connect to DB
-    Check If Exists In Database    SELECT ID FROM tsao_accounts WHERE Name = 'Ben Low';
-    [Teardown]    Disconnect From Database
-
-Check If Not Exists In DB
-    [Documentation]    Verify that specific data does not exist in the database.
-    [Setup]    Connect to DB
-    Check If Not Exists In Database    SELECT ID FROM tsao_records WHERE ContactRole = 'Lecturer';
-    [Teardown]    Disconnect From Database
-
-Verify Query - Row Count tsao_accounts table
-    [Documentation]    Verify the row count of 'tsao_accounts' table.
-    [Setup]    Connect to DB
-    ${output} =    Query    SELECT COUNT(*) FROM tsao_accounts;
-    Log    ${output}
-    ${val}=    Get from list    ${output}    0
-    ${val}=    Convert to list    ${val}
-    ${val}=    Get from list    ${val}    0
-    Should be equal as Integers    ${val}    5
-    [Teardown]    Disconnect From Database
-
-# Add more test cases based on the list provided earlier...
-
-
-
-
-#added after first push.
-########################################################################
-# Test Case 1: Verify Unique Usernames
-Check Unique Usernames
-    [Documentation]    Verify that all usernames in 'tsao_accounts' table are unique.
-    [Setup]    Connect to DB
-    ${duplicate_usernames} =    Query    SELECT Username, COUNT(*) FROM tsao_accounts GROUP BY Username HAVING COUNT(*) > 1
-    Run Keyword If    ${duplicate_usernames}    Fail    Duplicate usernames found: ${duplicate_usernames}
-    [Teardown]    Disconnect From Database
-
-# Test Case 2: Verify Password Length
-Check Password Length
-    [Documentation]    Verify that passwords in 'tsao_accounts' table have a minimum length of 8 characters.
-    [Setup]    Connect to DB
-    ${short_passwords} =    Query    SELECT Username FROM tsao_accounts WHERE LENGTH(Password) < 8
-    Run Keyword If    ${short_passwords}    Fail    Passwords with insufficient length found: ${short_passwords}
-    [Teardown]    Disconnect From Database
-
-# Test Case 3: Verify Creation Date Range
-Check Creation Date Range
-    [Documentation]    Verify that the 'CreationDate' values in 'tsao_accounts' are within an acceptable range.
-    [Setup]    Connect to DB
-    ${out_of_range_dates} =    Query    SELECT Username FROM tsao_accounts WHERE CreationDate < '2024-01-01' OR CreationDate > '2024-12-31'
-    Run Keyword If    ${out_of_range_dates}    Fail    Dates outside the acceptable range found: ${out_of_range_dates}
-    [Teardown]    Disconnect From Database
-
-# Test Case 4: Verify Inactive Accounts
-Check Inactive Accounts
-    [Documentation]    Verify that accounts marked as 'IsDeleted' are also marked as 'IsApproved'.
-    [Setup]    Connect to DB
-    ${inactive_accounts} =    Query    SELECT Username FROM tsao_accounts WHERE IsDeleted = true AND IsApproved = false
-    Run Keyword If    ${inactive_accounts}    Fail    Inactive accounts not marked correctly: ${inactive_accounts}
-    [Teardown]    Disconnect From Database
-
-# Test Case 5: Verify Admin Role Presence
-Check Admin Role Presence
-    [Documentation]    Verify that at least one account has the 'Administrator' role in 'tsao_accounts'.
-    [Setup]    Connect to DB
-    ${admin_accounts} =    Query    SELECT Username FROM tsao_accounts WHERE Role = 'Administrator'
-    Run Keyword If    not ${admin_accounts}    Fail    No accounts found with the 'Administrator' role.
-    [Teardown]    Disconnect From Database
-
-# Test Case 6: Verify Foreign Key Relationship
-Check Foreign Key Relationship
+Verify Foreign Key Relationship in tsao_records is Valid
     [Documentation]    Verify that the 'AccountID' in 'tsao_records' references a valid 'ID' in 'tsao_accounts'.
     [Setup]    Connect to DB
     ${invalid_foreign_keys} =    Query    SELECT r.AccountID FROM tsao_records r LEFT JOIN tsao_accounts a ON r.AccountID = a.ID WHERE a.ID IS NULL
     Run Keyword If    ${invalid_foreign_keys}    Fail    Invalid foreign keys found in 'tsao_records': ${invalid_foreign_keys}
     [Teardown]    Disconnect From Database
 
-# Test Case 7: Verify Contact Role Values
-Check Contact Role Values
-    [Documentation]    Verify that 'ContactRole' values in 'tsao_records' are either 'Staff' or 'Student'.
+Verify Unique Constraint of tsao_accounts Table
+    [Documentation]    Verify the unique constraint on the 'Username' column of tsao_accounts table.
     [Setup]    Connect to DB
-    ${invalid_contact_roles} =    Query    SELECT ContactRole FROM tsao_records WHERE ContactRole NOT IN ('Staff', 'Student')
-    Run Keyword If    ${invalid_contact_roles}    Fail    Invalid 'ContactRole' values found in 'tsao_records': ${invalid_contact_roles}
+    ${unique_constraint}    Query    SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS WHERE table_name = 'tsao_accounts' AND column_name = 'Username' AND non_unique = 0
+    Run Keyword If    ${unique_constraint[0][0]} > 0    Log    Unique constraint exists for the 'Username' column
+    Run Keyword If    ${unique_constraint[0][0]} == 0    Fail    No unique constraint found for the 'Username' column
     [Teardown]    Disconnect From Database
 
+Verify Enum Values of tsao_accounts Table
+    [Documentation]    Verify that the 'Role' column from tsao_accounts table only accepts values 'Administrator' and 'User'.
+    [Setup]    Connect to DB
+    ${enum_values}    Query    SELECT DISTINCT Role FROM tsao_accounts
+    List Should Contain Value    ${enum_values[0]}    Administrator
+    List Should Contain Value    ${enum_values[1]}    User
+    [Teardown]    Disconnect From Database
+
+Verify Admin Role Presence in tsao_accounts Table
+    [Documentation]    Verify that at least one account has the 'Administrator' role in 'tsao_accounts'.
+    [Setup]    Connect to DB
+    ${admin_accounts} =    Query    SELECT Username FROM tsao_accounts WHERE Role = 'Administrator'
+    Run Keyword If    not ${admin_accounts}    Fail    No accounts found with the 'Administrator' role.
+    [Teardown]    Disconnect From Database
+
+Verify Default Values of IsApproved and IsDeleted of tsao_accounts Table
+    [Documentation]    Verify default values for 'IsApproved' and 'IsDeleted' of tsao_accounts table.
+    [Setup]    Connect to DB
+    ${default_values}    Query    SELECT IsApproved, IsDeleted FROM tsao_accounts WHERE ID=1
+    Run Keyword If    ${default_values}    Verify IsApproved and IsDeleted Default Values    ${default_values}
+    Run Keyword If    not ${default_values}    Fail    No default values found for the 'IsApproved' and 'IsDeleted' columns
+    [Teardown]    Disconnect From Database
+
+Verify That Usernames in tsao_accounts Table are Unique
+    [Documentation]    Verify that all usernames in 'tsao_accounts' table are unique.
+    [Setup]    Connect to DB
+    ${duplicate_usernames} =    Query    SELECT Username, COUNT(*) FROM tsao_accounts GROUP BY Username HAVING COUNT(*) > 1
+    Run Keyword If    ${duplicate_usernames}    Fail    Duplicate usernames found: ${duplicate_usernames}
+    [Teardown]    Disconnect From Database
+
+Verify Minimum Password Length in tsao_accounts Table
+    [Documentation]    Verify that passwords in 'tsao_accounts' table have a minimum length of 8 characters.
+    [Setup]    Connect to DB
+    ${short_passwords} =    Query    SELECT Username FROM tsao_accounts WHERE LENGTH(Password) < 8
+    Run Keyword If    ${short_passwords}    Fail    Passwords with insufficient length found: ${short_passwords}
+    [Teardown]    Disconnect From Database
+
+Verify Creation Date Range in tsao_accounts Table is Valid
+    [Documentation]    Verify that the 'CreationDate' values in 'tsao_accounts' are within an acceptable range.
+    [Setup]    Connect to DB
+    ${out_of_range_dates} =    Query    SELECT Username FROM tsao_accounts WHERE CreationDate < '2024-01-01' OR CreationDate > '2024-12-31'
+    Run Keyword If    ${out_of_range_dates}    Fail    Dates outside the acceptable range found: ${out_of_range_dates}
+    [Teardown]    Disconnect From Database
+
+Verify Inactive Accounts in tsao_accounts Table Marked Correctly
+    [Documentation]    Verify that accounts marked as 'IsDeleted' are also marked as 'IsApproved'.
+    [Setup]    Connect to DB
+    ${inactive_accounts} =    Query    SELECT Username FROM tsao_accounts WHERE IsDeleted = true AND IsApproved = false
+    Run Keyword If    ${inactive_accounts}    Fail    Inactive accounts not marked correctly: ${inactive_accounts}
+    [Teardown]    Disconnect From Database
 
 ##########Error Unsolved#################################################
-# Test Case 8: Verify Academic Year Format
 # Check Academic Year Format
 #     [Documentation]    Verify that 'AcadYear' values in 'tsao_records' follow the format: YYYY/YY (e.g., 2023/24).
 #     [Setup]    Connect to DB
@@ -212,73 +273,63 @@ Check Contact Role Values
 #     Run Keyword If    ${incorrect_academic_years}    Fail    Some 'AcadYear' values do not follow the format: YYYY/YY. Detailed failures: ${incorrect_academic_years}
 #     [Teardown]    Disconnect From Database
 
-
-# Test Case 9: Verify Student Count Range
-Check Student Count Range
+Verify Count Range of Student in tsao_records Table
     [Documentation]    Verify that 'StudentCount' values in 'tsao_records' are within an acceptable range.
     [Setup]    Connect to DB
     ${out_of_range_student_counts} =    Query    SELECT StudentCount FROM tsao_records WHERE StudentCount < 0 OR StudentCount > 1000
     Run Keyword If    ${out_of_range_student_counts}    Fail    'StudentCount' values outside the acceptable range found in 'tsao_records': ${out_of_range_student_counts}
     [Teardown]    Disconnect From Database
 
-# Test Case 10: Verify Creation Date Range
-Check Record Creation Date Range
+Verify Record Creation Date Range in tsao_records Table is Valid
     [Documentation]    Verify that 'CreationDate' values in 'tsao_records' are within an acceptable range.
     [Setup]    Connect to DB
     ${out_of_range_record_dates} =    Query    SELECT CreationDate FROM tsao_records WHERE CreationDate < '2024-01-01' OR CreationDate > '2024-12-31'
     Run Keyword If    ${out_of_range_record_dates}    Fail    Dates outside the acceptable range found in 'tsao_records': ${out_of_range_record_dates}
     [Teardown]    Disconnect From Database
 
-# Test Case 11: Verify Deleted Records Absence
-Check Deleted Records Absence
+Verify Deleted Records in tsao_records Table is Absence
     [Documentation]    Verify that records marked as 'IsDeleted' are not present in 'tsao_records'.
     [Setup]    Connect to DB
     ${deleted_records} =    Query    SELECT Title FROM tsao_records WHERE IsDeleted = true
     Run Keyword If    ${deleted_records}    Fail    Deleted records found in 'tsao_records': ${deleted_records}
     [Teardown]    Disconnect From Database
 
-# Test Case 12: Verify Description Length
-Check Description Length
+Verify Description Length in tsao_records Table
     [Documentation]    Verify that 'Description' values in 'tsao_records' have a maximum length of 500 characters.
     [Setup]    Connect to DB
     ${long_descriptions} =    Query    SELECT Title, LENGTH(Description) FROM tsao_records WHERE LENGTH(Description) > 500
     Run Keyword If    ${long_descriptions}    Fail    Descriptions exceeding maximum length found in 'tsao_records': ${long_descriptions}
     [Teardown]    Disconnect From Database
 
-# Test Case 13: Verify Record Title Uniqueness
-Check Record Title Uniqueness
+Verify Titles in tsao_records Table are Unique
     [Documentation]    Verify that all 'Title' values in 'tsao_records' are unique.
     [Setup]    Connect to DB
     ${duplicate_titles} =    Query    SELECT Title, COUNT(*) FROM tsao_records GROUP BY Title HAVING COUNT(*) > 1
     Run Keyword If    ${duplicate_titles}    Fail    Duplicate record titles found in 'tsao_records': ${duplicate_titles}
     [Teardown]    Disconnect From Database
 
-# Test Case 14: Verify Company Name Length
-Check Company Name Length
+Verify Company Name Length of tsao_records Table
     [Documentation]    Verify that 'CompanyName' values in 'tsao_records' have a maximum length of 100 characters.
     [Setup]    Connect to DB
     ${long_company_names} =    Query    SELECT Title, LENGTH(CompanyName) FROM tsao_records WHERE LENGTH(CompanyName) > 100
     Run Keyword If    ${long_company_names}    Fail    Company names exceeding maximum length found in 'tsao_records': ${long_company_names}
     [Teardown]    Disconnect From Database
 
-# Test Case 15: Verify Company POC Length
-Check Company POC Length
+Verify Company POC Length of tsao_accounts Table
     [Documentation]    Verify that 'CompanyPOC' values in 'tsao_records' have a maximum length of 100 characters.
     [Setup]    Connect to DB
     ${long_company_pocs} =    Query    SELECT Title, LENGTH(CompanyPOC) FROM tsao_records WHERE LENGTH(CompanyPOC) > 100
     Run Keyword If    ${long_company_pocs}    Fail    Company points of contact exceeding maximum length found in 'tsao_records': ${long_company_pocs}
     [Teardown]    Disconnect From Database
 
-# Test Case 16: Verify Record CreationDate
-Check Record CreationDate
+Verify Creation Date in tsao_records are Valid
     [Documentation]    Verify that 'CreationDate' values in 'tsao_records' are populated and not null.
     [Setup]    Connect to DB
     ${missing_creation_dates} =    Query    SELECT Title FROM tsao_records WHERE CreationDate IS NULL
     Run Keyword If    ${missing_creation_dates}    Fail    Records with missing 'CreationDate' found in 'tsao_records': ${missing_creation_dates}
     [Teardown]    Disconnect From Database
 
-# Test Case 17: Verify Record Deletion Cascade
-Check Record Deletion Cascade
+Verify Deletion Cascade of tsao_accounts Table
     [Documentation]    Verify that deleting an account in 'tsao_accounts' cascades to delete associated records in 'tsao_records'.
     [Setup]    Connect to DB
     # Assuming account with ID 7 is used as a sample for deletion
@@ -287,8 +338,7 @@ Check Record Deletion Cascade
     Run Keyword If    ${remaining_records}    Fail    Records associated with deleted account still exist in 'tsao_records': ${remaining_records}
     [Teardown]    Disconnect From Database
 
-# Test Case 18: Verify Record Deletion Cascade - Inverse
-Check Record Deletion Cascade - Inverse
+Verify Deletion Cascade - Inverse of tsao_records Table
     [Documentation]    Verify that deleting a record in 'tsao_records' does not affect the associated account in 'tsao_accounts'.
     [Setup]    Connect to DB
     # Assuming record with ID 12 is used as a sample for deletion
@@ -297,16 +347,14 @@ Check Record Deletion Cascade - Inverse
     Run Keyword If    not ${remaining_accounts}    Fail    Associated account deleted along with the record in 'tsao_records'.
     [Teardown]    Disconnect From Database
 
-# Test Case 19: Verify Record and Account Association
-Check Record and Account Association
+Verify Association of tsao_accounts Table and tsao_records Table
     [Documentation]    Verify that each record in 'tsao_records' is associated with a valid account in 'tsao_accounts'.
     [Setup]    Connect to DB
     ${invalid_associations} =    Query    SELECT r.ID, r.Title FROM tsao_records r LEFT JOIN tsao_accounts a ON r.AccountID = a.ID WHERE a.ID IS NULL
     Run Keyword If    ${invalid_associations}    Fail    Records with invalid associations found in 'tsao_records': ${invalid_associations}
     [Teardown]    Disconnect From Database
 
-# Test Case 20: Verify Account and Record Deletion Cascade
-Check Account and Record Deletion Cascade
+Verify Deletion Cascade of tsao_accounts Table and tsao_records Table
     [Documentation]    Verify that deleting an account in 'tsao_accounts' cascades to delete all associated records in 'tsao_records'.
     [Setup]    Connect to DB
     # Assuming account with ID 9 is used as a sample for deletion
@@ -314,7 +362,6 @@ Check Account and Record Deletion Cascade
     ${remaining_records} =    Query    SELECT Title FROM tsao_records WHERE AccountID = 9
     Run Keyword If    ${remaining_records}    Fail    Records associated with deleted account still exist in 'tsao_records': ${remaining_records}
     [Teardown]    Disconnect From Database
-
 
 *** Keywords ***
 Connect to DB
@@ -329,3 +376,7 @@ Verify IsApproved and IsDeleted Default Values
     [Arguments]    ${values}
     Should Be Equal As Numbers    1    ${values[0][0]}
     Should Be Equal As Numbers    0    ${values[0][1]}
+
+
+
+
