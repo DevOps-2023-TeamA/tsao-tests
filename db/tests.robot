@@ -53,11 +53,10 @@ Delete Data in tsao_accounts Table
 Select tsao_records Table With Multiple Rows
     [Documentation]  Test to SELECT multiple rows of data in tsao_records table.  
     [Setup]    Connect to DB
-    ${output}=    Query    SELECT CompanyPO from tsao_records
-    Length Should Be    ${output}    3
-    Should Be Equal    ${output}[0][0][0]    Er
-    Should Be Equal    ${output}[1][0]    Ben
-    Should Be Equal    ${output}[2][0]    John
+    ${output}=    Query    SELECT CompanyPOC from tsao_records
+    Length Should Be    ${output}    2
+    Should Be Equal    ${output}[0][0][0]    E
+    Should Be Equal    ${output}[1][0]    Ben Low
     [Teardown]    Disconnect From Database
 
 Check If Data Exists In tsao_accounts Table
@@ -82,7 +81,7 @@ Check Contact Role Values of tsao_records Table
 Verify Row Count of tsao_records Table is Equal to X
     [Documentation]    Verify the row count of tsao_records table is equal to X value.
     [Setup]    Connect to DB
-    Row Count is Equal to X    SELECT ID FROM tsao_records    3
+    Row Count is Equal to X    SELECT ID FROM tsao_records    2
     [Teardown]    Disconnect From Database
 
 Verify Row Count of tsao_accounts Table is Less Than X
@@ -94,7 +93,7 @@ Verify Row Count of tsao_accounts Table is Less Than X
 Verify Row Count of tsao_records Table is Greater Than X
     [Documentation]    Verify the row count of tsao_records table is greater than X value.
     [Setup]    Connect to DB
-    Row Count is Greater Than X    SELECT ID FROM tsao_records    2
+    Row Count is Greater Than X    SELECT ID FROM tsao_records    1
     [Teardown]    Disconnect From Database
 
 Retrieve Row Count of tsao_records Table
@@ -102,7 +101,7 @@ Retrieve Row Count of tsao_records Table
     [Setup]    Connect to DB
     ${output}=    Row Count    SELECT ID FROM tsao_records
     Log    ${output}
-    Should Be Equal As Strings    ${output}    3
+    Should Be Equal As Strings    ${output}    2
     [Teardown]    Disconnect From Database
 
 Retrieve records from tsao_records Table
@@ -126,7 +125,7 @@ Verify Query - Row Count tsao_records Table
     [Setup]    Connect to DB
     ${output}=    Query    SELECT COUNT(*) FROM tsao_records
     Log    ${output}
-    Should Be Equal As Integers    ${output}[0][0]    3
+    Should Be Equal As Integers    ${output}[0][0]    2
     [Teardown]    Disconnect From Database
 
 Verify Query - Get results as a list of dictionaries from tsao_accounts Table
@@ -146,7 +145,7 @@ Verify Query - Get results as a list of dictionaries from tsao_accounts Table
         ${value 2}=    Get From Dictionary    ${output}[1]    Name
     END
     Should Be Equal As Strings    ${value 1}    Ben Low
-    Should Be Equal As Strings    ${value 2}    Er Pooi Voon
+    Should Be Equal As Strings    ${value 2}    Er Poi Voon
     [Teardown]    Disconnect From Database
 
 #GJ
