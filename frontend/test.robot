@@ -27,14 +27,14 @@ Set Chrome Options
     FOR    ${arg}    IN    @{CHROME_OPTIONS}
         Call Method    ${options}    add_argument    ${arg}
     END
-    [Return]    ${options}
+    RETURN    ${options}
 
 Set Firefox Options
     [Arguments]    ${options}
     FOR    ${arg}    IN    @{FIREFOX_OPTIONS}
         Call Method    ${options}    add_argument    ${arg}
     END
-    [Return]    ${options}
+    RETURN    ${options}
 
 Go To Site
     Go To    ${URL}
