@@ -10,7 +10,7 @@ ${URL}            http://localhost:8080
 Open Website
     Open Browser    ${browser}
     Go To Site
-    Title Should Be    TSA Office Records Systems
+    Title Should Be    Home | TSA0 Records Systems
     Capture Page Screenshot
     [Teardown]  Close Browser
 
