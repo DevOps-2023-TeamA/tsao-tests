@@ -8,8 +8,7 @@ Documentation       The test cases are used to test the functionality of the fea
 Resource    variables.robot
 
 *** Variables ***
-#http://localhost:8080
-${URL}            http://127.0.0.1:5500/tsao-frontend-svc/
+${URL}            http://localhost:8080
 @{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
 @{FIREFOX_OPTIONS}  headless  disable-gpu  window-size=1920,1080
 
@@ -69,8 +68,6 @@ Check Response When Invalid Inputs are Entered into Create New Entry Page
     Sleep    5s
     Input Text   ${create_entry_name}    Low!23
     Sleep    5s
-    # Click Button    ${create_entry_role_student}
-    # Sleep    5s
     Click Element    ${create_entry_no_of_students}
     Sleep    5s
     Input Text   ${create_entry_no_of_students}    ZXC
@@ -109,8 +106,6 @@ Check Response When No Input is Entered into Create New Entry Page
     Sleep    5s
     Clear Element Text   ${create_entry_name}    
     Sleep    5s
-    # Click Button    ${create_entry_role_student}
-    # Sleep    5s
     Click Element    ${create_entry_no_of_students}
     Sleep    5s
     Clear Element Text   ${create_entry_no_of_students}
