@@ -1,8 +1,15 @@
 # tsao tests
 ## contents
+- [install everything](#install-everything)
 - [database testing setup](#database-testing-setup)
 - [backend testing setup](#backend-testing-setup)
 - [frontend testing setup](#frontend-testing-setup)
+
+## install everything
+Install all required frameworks for testing frontend, backend, and database.
+```sh
+pip install -r requirements.txt
+```
 
 ## database testing setup
 ### installation
@@ -23,7 +30,21 @@ robot -v DB_NAME:tsao -v DB_USER:{USERNAME} -v DB_PASSWORD:{PASSWORD} tests.robo
 > Consider adding the `--outputdir` flag to pass in an output directory.
 
 ## backend testing setup
-Not currently set up.
+### installation
+Install RobotFramework, DatabaseLibrary, and Pymysql (the database connector)
+```sh
+pip install robotframework
+pip install robotframework-requests
+```
+
+### testing
+To run the test, run the following command.
+```sh
+robot tests.robot
+```
+> ⚠️ Do not push testing artefacts into this repository.
+> 
+> Consider adding the `--outputdir` flag to pass in an output directory.
 
 ## frontend testing setup
 ```sh
