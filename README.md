@@ -25,7 +25,8 @@ To run the test, run the following command, replacing `{USERNAME}` and `{PASSWOR
 ```sh
 robot -v DB_NAME:tsao -v DB_USER:{USERNAME} -v DB_PASSWORD:{PASSWORD} tests.robot
 ```
-> ⚠️ Do not push testing artefacts into this repository.
+> [!IMPORTANT]  
+> Do not push testing artefacts into this repository.
 > 
 > Consider adding the `--outputdir` flag to pass in an output directory.
 
@@ -42,7 +43,8 @@ To run the test, run the following command.
 ```sh
 robot tests.robot
 ```
-> ⚠️ Do not push testing artefacts into this repository.
+> [!IMPORTANT]  
+> Do not push testing artefacts into this repository.
 > 
 > Consider adding the `--outputdir` flag to pass in an output directory.
 
@@ -54,7 +56,8 @@ pip install robotframework-seleniumlibrary
 
 ### testing
 Deploy the frontend site onto `localhost:8080`.
-> ⚠️ You will need the backend and database to be set up.
+> [!NOTE]  
+> You will need the backend and database to be set up.
 > - Frontend tests will not work without the full stack set up.
 
 To run the test, run the following command, replacing `{BROWSER}` with the browser.
@@ -62,6 +65,16 @@ To run the test, run the following command, replacing `{BROWSER}` with the brows
 > - Chrome (`BROWSER:chrome`)
 > - Firefox (`BROWSER:firefox`)
 
+> [!CAUTION]
+> The Firefox implementation is currently broken.
+
 ```sh
 robot -v BROWSER:{BROWSER} --outputdir results/ tests/test.robot
 ```
+
+## maintainers
+- [Yee Jia Chen](https://github.com/jiachenyee) S10219344C
+- [Isabelle Pak Yi Shan](https://github.com/isabellepakyishan) S10222456J
+- [Ho Kuan Zher](https://github.com/Kuan-Zher) S10223870D
+- [Cheah Seng Jun](https://github.com/DanielCheahSJ) S10227333K
+- [Chua Guo Jun](https://github.com/GuojunLoser) S10227743H
