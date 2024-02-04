@@ -29,7 +29,7 @@ jobs:
           ## ${{ github.event.inputs.sender }} Tests Failed
           <@&1203634418846007317> <@&1203634391633362994> WAKE UP!!! We have a problem.
 
-          [More Info](${{ github.event.inputs.sender }})
+          [More Info](${{ github.event.inputs.resultsURL }})
         username: "TSAO Remote Tester"
   success_acknowledgement:
     if: ${{ github.event.inputs.success == 'true' }}
@@ -46,5 +46,5 @@ jobs:
         content: |
           ## ${{ github.event.inputs.sender }} Tests Succeeded
 
-          [More Info](${{ github.event.inputs.sender }})
+          [More Info](${{ github.event.inputs.resultsURL }})
         username: "TSAO Remote Tester"
