@@ -1,4 +1,14 @@
 *** Variables ***
+${admin_username}    lkh2
+${admin_password}    password
+${user_username}    lkh
+${user_password}    password
+${login_username}    xpath://*[@id="username"]
+${login_password}    xpath://*[@id="password"]
+${login_button}    xpath://*[@id="loginButton"]
+${main_create_records}    xpath://*[@id="roleButtons"]/a[1]
+${main_modify_accounts}    xpath://*[@id="roleButtons"]/a[2]
+${main_query_records}    xpath://*[@id="roleButtons"]/a[3]
 ${create_entry_url}    http://127.0.0.1:5500/tsao-frontend-svc/createentry.html
 ${create_entry_name}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[1]/div/input
 ${create_entry_save}    xpath://*[@id="save"]
