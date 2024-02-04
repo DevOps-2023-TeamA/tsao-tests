@@ -33,7 +33,7 @@ jobs:
           -d '{"ref":"${{ steps.check_branch_db.outputs.branch }}"}'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      - name: "[Database] Check if current branch exists"
+      - name: "[Frontend] Check if current branch exists"
         id: check_branch_fe
         run: |
           BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
@@ -52,5 +52,26 @@ jobs:
           curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/DevOps-2023-TeamA/tsao-frontend-svc/actions/workflows/tests.yml/dispatches \
           -d '{"ref":"${{ steps.check_branch_fe.outputs.branch }}"}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Backend] Check if current branch exists"
+        id: check_branch_be
+        run: |
+          BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-backend-svc/branches/${{ steps.branch-names.outputs.current_branch }}")
+          if [ "$BRANCH_EXISTS" -eq 200 ]; then
+            echo "[Database] Branch exists."
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
+          else
+            echo "[Database] Branch does not exist. Using main."
+            echo "::set-output name=branch::main"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Backend] Trigger Backend Tests on the specified branch"
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/DevOps-2023-TeamA/tsao-backend-svc/actions/workflows/tests.yml/dispatches \
+          -d '{"ref":"${{ steps.check_branch_be.outputs.branch }}"}'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
