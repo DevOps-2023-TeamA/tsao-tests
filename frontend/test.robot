@@ -8,7 +8,7 @@ ${URL}            http://localhost:8080
 
 *** Test Cases ***
 Open Website
-    Open Browser    
+    Open Browser    ${browser}
     Go To Site
     Title Should Be    TSA Office Records Systems
     Capture Page Screenshot
