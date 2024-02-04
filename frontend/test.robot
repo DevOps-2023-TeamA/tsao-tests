@@ -8,7 +8,7 @@ Documentation       The test cases are used to test the functionality of the fea
 Resource    variables.robot
 
 *** Variables ***
-${URL}            http://localhost:8080
+${URL}            http://127.0.0.1:5500/tsao-frontend-svc/createentry.html
 @{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
 @{FIREFOX_OPTIONS}  headless  disable-gpu  window-size=1920,1080
 
@@ -24,7 +24,6 @@ Check Response When Valid Inputs are Entered into Create New Entry Page
     Open Browser
     Go To Create New Capstone Entry Page
     Title Should Be   TSA Office Records Systems
-    Capture Page Screenshot
     Click Element    ${create_entry_name}
     Sleep    5s
     Input Text   ${create_entry_name}    Low KH
@@ -63,7 +62,6 @@ Check Response When Invalid Inputs are Entered into Create New Entry Page
     Open Browser
     Go To Create New Capstone Entry Page
     Title Should Be   TSA Office Records Systems
-    Capture Page Screenshot
     Click Element    ${create_entry_name}
     Sleep    5s
     Input Text   ${create_entry_name}    Low!23
@@ -101,7 +99,6 @@ Check Response When No Input is Entered into Create New Entry Page
     Open Browser
     Go To Create New Capstone Entry Page
     Title Should Be   TSA Office Records Systems
-    Capture Page Screenshot
     Click Element    ${create_entry_name}
     Sleep    5s
     Clear Element Text   ${create_entry_name}    
