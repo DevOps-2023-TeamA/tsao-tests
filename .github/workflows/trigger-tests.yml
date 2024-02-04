@@ -12,16 +12,14 @@ jobs:
       - name: Extract branch name
         run: | 
           echo "Running in: ${{ steps.branch-names.outputs.current_branch }}"
-          # echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
-          # echo "The current branch name is $BRANCH_NAME"
       - name: "[Database] Check if current branch exists"
         id: check_branch_db
         run: |
           BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-db/branches/branch_name")
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-db/branches/${{ steps.branch-names.outputs.current_branch }}")
           if [ "$BRANCH_EXISTS" -eq 200 ]; then
             echo "[Database] Branch exists."
-            echo "::set-output name=branch::branch_name"
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
           else
             echo "[Database] Branch does not exist. Using main."
             echo "::set-output name=branch::main"
@@ -39,10 +37,10 @@ jobs:
         id: check_branch_fe
         run: |
           BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-frontend-svc/branches/branch_name")
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-frontend-svc/branches/${{ steps.branch-names.outputs.current_branch }}")
           if [ "$BRANCH_EXISTS" -eq 200 ]; then
             echo "[Database] Branch exists."
-            echo "::set-output name=branch::branch_name"
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
           else
             echo "[Database] Branch does not exist. Using main."
             echo "::set-output name=branch::main"
