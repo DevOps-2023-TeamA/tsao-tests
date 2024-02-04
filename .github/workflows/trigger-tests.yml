@@ -6,17 +6,23 @@ jobs:
   example_job:
     runs-on: ubuntu-latest
     steps:
+      - name: Get branch names.
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+      - name: Extract branch name
+        run: | 
+          echo "Running in: ${{ steps.branch-names.outputs.current_branch }}"
       - name: "[Database] Check if current branch exists"
-        id: check_branch
+        id: check_branch_db
         run: |
           BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-db/branches/branch_name")
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-db/branches/${{ steps.branch-names.outputs.current_branch }}")
           if [ "$BRANCH_EXISTS" -eq 200 ]; then
             echo "[Database] Branch exists."
-            echo "::set-output name=dbbranch::branch_name"
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
           else
             echo "[Database] Branch does not exist. Using main."
-            echo "::set-output name=dbbranch::main"
+            echo "::set-output name=branch::main"
           fi
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -24,6 +30,48 @@ jobs:
         run: |
           curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/DevOps-2023-TeamA/tsao-db/actions/workflows/tests.yml/dispatches \
-          -d '{"ref":"${{ steps.check_branch.outputs.dbbranch }}"}'
+          -d '{"ref":"${{ steps.check_branch_db.outputs.branch }}"}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Frontend] Check if current branch exists"
+        id: check_branch_fe
+        run: |
+          BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-frontend-svc/branches/${{ steps.branch-names.outputs.current_branch }}")
+          if [ "$BRANCH_EXISTS" -eq 200 ]; then
+            echo "[Database] Branch exists."
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
+          else
+            echo "[Database] Branch does not exist. Using main."
+            echo "::set-output name=branch::main"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Frontend] Trigger Frontend Tests on the specified branch"
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/DevOps-2023-TeamA/tsao-frontend-svc/actions/workflows/tests.yml/dispatches \
+          -d '{"ref":"${{ steps.check_branch_fe.outputs.branch }}"}'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Backend] Check if current branch exists"
+        id: check_branch_be
+        run: |
+          BRANCH_EXISTS=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/repos/DevOps-2023-TeamA/tsao-backend-svc/branches/${{ steps.branch-names.outputs.current_branch }}")
+          if [ "$BRANCH_EXISTS" -eq 200 ]; then
+            echo "[Database] Branch exists."
+            echo "::set-output name=branch::${{ steps.branch-names.outputs.current_branch }}"
+          else
+            echo "[Database] Branch does not exist. Using main."
+            echo "::set-output name=branch::main"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: "[Backend] Trigger Backend Tests on the specified branch"
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/DevOps-2023-TeamA/tsao-backend-svc/actions/workflows/tests.yml/dispatches \
+          -d '{"ref":"${{ steps.check_branch_be.outputs.branch }}"}'
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
