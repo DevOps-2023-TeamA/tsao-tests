@@ -31,6 +31,8 @@ jobs:
 
           [More Info](${{ github.event.inputs.resultsURL }})
         username: "TSAO Remote Tester"
+    - name: Fail Action
+      run: exit 1
   success_acknowledgement:
     if: ${{ github.event.inputs.success == 'true' }}
     runs-on: ubuntu-latest
