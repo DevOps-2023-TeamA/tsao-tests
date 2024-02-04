@@ -9,6 +9,7 @@ ${login_button}    xpath://*[@id="loginButton"]
 ${main_create_records}    xpath://*[@id="roleButtons"]/a[1]
 ${main_modify_accounts}    xpath://*[@id="roleButtons"]/a[2]
 ${main_query_records}    xpath://*[@id="roleButtons"]/a[3]
+${account_mgmt_return}    xpath://*[@id="returnButton"]
 ${create_entry_url}    http://127.0.0.1:5500/tsao-frontend-svc/createentry.html
 ${create_entry_name}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[1]/div/input
 ${create_entry_save}    xpath://*[@id="save"]

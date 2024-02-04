@@ -124,6 +124,28 @@ Check Response When User Click on Modify Accounts Button
     Capture Page Screenshot
     [Teardown]  Close Browser
 
+Check Response When User Click on Return Button
+    Open Browser    
+    Go To Site
+    Title Should Be    TSA Office Records Systems
+    Click Element    ${login_username}
+    Sleep    2s
+    Input Text    ${login_username}    lkh2
+    Sleep    2s
+    Click Element    ${login_password}
+    Sleep    s2
+    Input Text    ${login_password}    password
+    Sleep    2s
+    Click Button    ${login_button}
+    Press Keys    ENTER
+    Sleep    2s
+    Title Should Be    Home | TSAO Records Systems
+    Click Element    ${account_mgmt_return}
+    Sleep    2s
+    Title Should Be    Home | TSAO Records Systems
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
 Check Response When User Click on Query Records Button
     Open Browser    
     Go To Site
