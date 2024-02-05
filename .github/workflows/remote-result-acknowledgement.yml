@@ -1,0 +1,52 @@
+name: Remote Result Acknowedgement
+
+on:
+  workflow_dispatch:
+    inputs:
+      sender:
+        description: 'Input sender'
+        required: true
+      resultsURL:
+        description: 'Actions results URL'
+        required: true
+      success:
+        description: 'true or false value to indicate status'
+        required: true
+jobs:
+  failure_acknowledgement:
+    if: ${{ github.event.inputs.success == 'false' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Failure Acknowledgement
+    steps:
+    - name: Send Discord Message
+      uses: tsickert/discord-webhook@v5.4.0
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      with:
+        webhook-url: ${{ env.DISCORD_WEBHOOK_URL }}
+        content: |
+          ## ${{ github.event.inputs.sender }} Tests Failed
+          <@&1203634418846007317> <@&1203634391633362994> WAKE UP!!! We have a problem.
+
+          [More Info](${{ github.event.inputs.resultsURL }})
+        username: "TSAO Remote Tester"
+    - name: Fail Action
+      run: exit 1
+  success_acknowledgement:
+    if: ${{ github.event.inputs.success == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Success Acknowledgement
+    steps:
+    - name: Send Discord Message
+      uses: tsickert/discord-webhook@v5.4.0
+      env:
+        DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      with:
+        webhook-url: ${{ env.DISCORD_WEBHOOK_URL }}
+        content: |
+          ## ${{ github.event.inputs.sender }} Tests Succeeded
+
+          [More Info](${{ github.event.inputs.resultsURL }})
+        username: "TSAO Remote Tester"
