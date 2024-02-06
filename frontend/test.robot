@@ -2,7 +2,7 @@
 Library           SeleniumLibrary
 
 *** Variables ***
-${URL}            http://localhost:8080
+${URL}            http://127.0.0.1:5500/login.html
 @{CHROME_OPTIONS}  headless  disable-gpu  window-size=1920,1080  ignore-certificate-errors  disable-extensions  no-sandbox  disable-dev-shm-usage
 @{FIREFOX_OPTIONS}  headless  disable-gpu  window-size=1920,1080
 ${admin_username}    lkh2
@@ -14,14 +14,14 @@ ${user_password}    password
 Open Website
     Open Browser    
     Go To Site
-    Title Should Be    Login | TSAO Capstone Records System
+    Title Should Be    TSA Office Records System
     Capture Page Screenshot
     [Teardown]  Close Browser
 
 Verify Login Page Opens Successfully
     [Setup]    Open Browser
     Go To Site
-    Title Should Be    Login | TSAO Capstone Records System
+    Title Should Be    TSA Office Records System
     [Teardown]    Close Browser
 
 Check Response for Valid Admin Credentials
@@ -102,7 +102,6 @@ Go To Site
     Go To    ${URL}
 
 
-#####################################################################GUOJUN
 Input Username
     [Arguments]    ${username}
     Input Text    id=username    ${username}

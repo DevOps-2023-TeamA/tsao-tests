@@ -4,8 +4,13 @@ Library  DatabaseLibrary
 Library    Collections
 
 *** Variables ***
-${DB_SERVER}  localhost
-${DB_PORT}  3306
+${DB_SERVER}     localhost
+${DB_PORT}       3306
+${DB_NAME}       tsao
+${DB_USER}       root
+${DB_PASSWORD}   Guojun@00
+
+
 
 *** Test Cases ***
 Verify SQL Statement Ending With Semicolon Works
@@ -87,7 +92,7 @@ Verify Row Count of tsao_records Table is Equal to X
 Verify Row Count of tsao_accounts Table is Less Than X
     [Documentation]    Verify the row count of tsao_accounts table is less than X value.
     [Setup]    Connect to DB
-    Row Count is Less Than X    SELECT ID FROM tsao_accounts    6
+    Row Count is Less Than X    SELECT ID FROM tsao_accounts    7
     [Teardown]    Disconnect From Database
 
 Verify Row Count of tsao_records Table is Greater Than X
@@ -117,7 +122,7 @@ Verify Query - Row Count tsao_accounts Table
     [Setup]    Connect to DB
     ${output}=    Query    SELECT COUNT(*) FROM tsao_accounts
     Log    ${output}
-    Should Be Equal As Integers    ${output}[0][0]    5
+    Should Be Equal As Integers    ${output}[0][0]    6
     [Teardown]    Disconnect From Database
 
 Verify Query - Row Count tsao_records Table
@@ -362,6 +367,167 @@ Verify Deletion Cascade of tsao_accounts Table and tsao_records Table
     Run Keyword If    ${remaining_records}    Fail    Records associated with deleted account still exist in 'tsao_records': ${remaining_records}
     [Teardown]    Disconnect From Database
 
+
+############################################TEST TO FAIL#######################################
+*** Test Cases ***
+Insert Data with Invalid Role
+    [Documentation]    Test inserting data with an invalid role into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid role, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Duplicate Username
+    [Documentation]    Test inserting data with a duplicate username into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'existing_username', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to duplicate username, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Missing Value
+    [Documentation]    Test inserting data with a missing value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', NULL, '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to missing value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Creation Date
+    [Documentation]    Test inserting data with an invalid creation date into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-13-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid creation date, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Role Value
+    [Documentation]    Test inserting data with an invalid role value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid role value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with NULL Username
+    [Documentation]    Test inserting data with a NULL username into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', NULL, 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to NULL username, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Role Format
+    [Documentation]    Test inserting data with an invalid role format into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRoleFormat', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid role format, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Future Creation Date
+    [Documentation]    Test inserting data with a future creation date into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2124-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to future creation date, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Non-Boolean IsApproved Value
+    [Documentation]    Test inserting data with a non-boolean IsApproved value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to non-boolean IsApproved value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Password Format
+    [Documentation]    Test inserting data with an invalid password format into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'pass', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid password format, but it succeeded
+    [Teardown]    Disconnect From Database
+    
+Insert Data with Invalid Creation Date Format
+    [Documentation]    Test inserting data with an invalid creation date format into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-013-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid creation date format, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Null Role
+    [Documentation]    Test inserting data with a NULL role value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', NULL, '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to NULL role value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid IsApproved Value
+    [Documentation]    Test inserting data with an invalid IsApproved value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid IsApproved value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid IsDeleted Value
+    [Documentation]    Test inserting data with an invalid IsDeleted value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, 'InvalidValue')
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid IsDeleted value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Data Type
+    [Documentation]    Test inserting data with an invalid data type into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES ('7', 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid data type, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Duplicate ID
+    [Documentation]    Test inserting data with a duplicate ID into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (1, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to duplicate ID, but it succeeded
+    [Teardown]    Disconnect From Database
+Insert Data with Invalid IsDeleted Value
+    [Documentation]    Test inserting data with an invalid IsDeleted value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, 'InvalidValue')
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid IsDeleted value, but it succeeded
+    [Teardown]    Disconnect From Database
+Insert Data with Null Value for Required Field
+    [Documentation]    Test inserting data with a NULL value for a required field into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, NULL, 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to NULL value for a required field, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Invalid Enum Value
+    [Documentation]    Test inserting data with an invalid enum value into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to invalid enum value, but it succeeded
+    [Teardown]    Disconnect From Database
+
+Insert Data with Non-Unique Index Violation
+    [Documentation]    Test inserting data that violates a non-unique index constraint into 'tsao_accounts' table.
+    [Setup]    Connect to DB
+    ${result} =    Run Keyword And Ignore Error    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (1, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${status} =    Run Keyword And Return Status    Should Not Be Equal As Strings    ${result}    FAIL
+    Run Keyword If    '${status}' == 'FAIL'    Fail    Expected insertion to fail due to non-unique index violation, but it succeeded
+    [Teardown]    Disconnect From Database
+    
 *** Keywords ***
 Connect to DB
     Connect To Database  pymysql  ${DB_NAME}  ${DB_USER}  ${DB_PASSWORD}  127.0.0.1  ${DBPort}
@@ -376,6 +542,11 @@ Verify IsApproved and IsDeleted Default Values
     Should Be Equal As Numbers    1    ${values[0][0]}
     Should Be Equal As Numbers    0    ${values[0][1]}
 
+Get Record Count
+    [Arguments]    ${table}    ${condition}
+    ${query} =    Set Variable    SELECT COUNT(*) FROM ${table} WHERE ${condition}
+    ${count} =    Query    ${query}
+    [Return]    ${count[0][0]}
 
 
 
