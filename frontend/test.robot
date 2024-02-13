@@ -1,9 +1,5 @@
 *** Settings ***
 Library           SeleniumLibrary
-Library    OperatingSystem
-Library    String
-Library    Dialogs
-Library    RequestsLibrary
 Documentation       The test cases are used to test the functionality of the features in TSAO Capstone Records Webpage.
 
 *** Variables ***
@@ -18,15 +14,10 @@ ${user_password}    password
 ${login_username}    xpath://*[@id="username"]
 ${login_password}    xpath://*[@id="password"]
 ${login_button}    xpath://*[@id="loginButton"]
-${main_create_records}    xpath://*[@id="roleButtons"]/a[1]
-${main_modify_accounts}    xpath://*[@id="roleButtons"]/a[2]
-${main_query_records}    xpath://*[@id="roleButtons"]/a[3]
-${account_mgmt_return}    xpath://*[@id="returnButton"]
-${create_entry_url}    http://127.0.0.1:5500/tsao-frontend-svc/createentry.html
+${create_entry_url}    http://127.0.0.1:5500/createentry.html
 ${create_entry_name}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[1]/div/input
 ${create_entry_save}    xpath://*[@id="save"]
 ${create_entry_role_staff}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[2]/div[1]/div/div[1]/input
-${create_entry_role_student}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[2]/div[1]/div/div[2]/input
 ${create_entry_no_of_students}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input
 ${create_entry_academic_year}    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
 ${create_entry_capstone_title}    xpath://*[@id="create-entry"]/div/div/div[1]/div[2]/div[1]/div/div/input
@@ -66,8 +57,8 @@ Check Response When no Input then Click on Login Button
     Open Browser
     Go To Site
     Submit Login
-    Sleep    1s  
-    Page Should Contain    Error: Incorrect username or password! Please try again.
+    Sleep    2s  
+    Page Should Contain    Error: Account does not exist
     Capture Page Screenshot
     [Teardown]    Close Browser
 
@@ -77,7 +68,7 @@ Check Response When Only Username is Entered in Login Page
     Input Username    ${admin_username}
     Submit Login
     Sleep    2s 
-    Page Should Contain    Error: Incorrect username or password! Please try again.
+    Page Should Contain    Error: Account does not exist
     Capture Page Screenshot
     [Teardown]    Close Browser
 
@@ -90,7 +81,7 @@ Check Response When Admin/User Clicks on Logout Button
     Submit Login
     Handle Alert    action=accept 
     Click Logout Button
-    Title Should Be    Login | TSAO Capstone Records System
+    Title Should Be    Login | TSA Office Records System
     Capture Page Screenshot
     [Teardown]    Close Browser
 
@@ -115,14 +106,14 @@ Check Response When User Click on Create Records Button
     Input Text    ${login_username}    lkh2
     Sleep    2s
     Click Element    ${login_password}
-    Sleep    s2
+    Sleep    2s
     Input Text    ${login_password}    password
     Sleep    2s
     Click Button    ${login_button}
     Press Keys    ENTER
     Sleep    2s
     Title Should Be    Home | TSAO Records Systems
-    Click Element    ${main_create_records}
+    Click Element    xpath://*[@id="roleButtons"]/a[1]
     Sleep    2s
     Capture Page Screenshot
     [Teardown]  Close Browser
@@ -136,14 +127,14 @@ Check Response When User Click on Modify Accounts Button
     Input Text    ${login_username}    lkh2
     Sleep    2s
     Click Element    ${login_password}
-    Sleep    s2
+    Sleep    2s
     Input Text    ${login_password}    password
     Sleep    2s
     Click Button    ${login_button}
     Press Keys    ENTER
     Sleep    2s
     Title Should Be    Home | TSAO Records Systems
-    Click Element    ${main_modify_accounts}
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
     Sleep    2s
     Capture Page Screenshot
     [Teardown]  Close Browser
@@ -157,14 +148,14 @@ Check Response When User Click on Return Button
     Input Text    ${login_username}    lkh2
     Sleep    2s
     Click Element    ${login_password}
-    Sleep    s2
+    Sleep    2s
     Input Text    ${login_password}    password
     Sleep    2s
     Click Button    ${login_button}
     Press Keys    ENTER
     Sleep    2s
     Title Should Be    Home | TSAO Records Systems
-    Click Element    ${account_mgmt_return}
+    Click Element    xpath://*[@id="returnButton"]
     Sleep    2s
     Title Should Be    Home | TSAO Records Systems
     Capture Page Screenshot
@@ -186,7 +177,7 @@ Check Response When User Click on Query Records Button
     Press Keys    ENTER
     Sleep    2s
     Title Should Be    Home | TSAO Records Systems
-    Click Element    ${main_query_records}
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
     Sleep    2s
     Capture Page Screenshot
     [Teardown]  Close Browser
@@ -199,7 +190,7 @@ Check Response When Valid Inputs are Entered into Create New Entry Page
     Sleep    2s
     Input Text   ${create_entry_name}    Low KH
     Sleep    2s
-    Click Button    ${create_entry_role_student}
+    Click Button    xpath://*[@id="create-entry"]/div/div/div[1]/div[1]/div/div/div[2]/div[1]/div/div[2]/input
     Sleep    2s
     Click Element    ${create_entry_no_of_students}
     Sleep    2s
