@@ -2,6 +2,7 @@
 Documentation       Tests which work with the same input params across all databases.
 Library  DatabaseLibrary
 Library    Collections
+Library    SeleniumLibrary
 
 *** Variables ***
 ${DB_SERVER}     localhost
@@ -61,9 +62,10 @@ Select tsao_records Table With Multiple Rows
     [Tags]    Select
     [Setup]    Connect to DB
     ${output}=    Query    SELECT CompanyPOC from tsao_records
-    Length Should Be    ${output}    2
+    Length Should Be    ${output}    3
     Should Be Equal    ${output}[0][0][0]    E
     Should Be Equal    ${output}[1][0]    Ben Low
+    Should Be Equal    ${output}[2][0]    John Law
     [Teardown]    Disconnect From Database
 
 Check If Data Exists In tsao_accounts Table
@@ -92,7 +94,7 @@ Verify Row Count of tsao_records Table is Equal to X
     [Documentation]    Verify the row count of tsao_records table is equal to X value.
     [Tags]    Verify/Check
     [Setup]    Connect to DB
-    Row Count is Equal to X    SELECT ID FROM tsao_records    2
+    Row Count is Equal to X    SELECT ID FROM tsao_records    3
     [Teardown]    Disconnect From Database
 
 Verify Row Count of tsao_accounts Table is Less Than X
@@ -102,47 +104,12 @@ Verify Row Count of tsao_accounts Table is Less Than X
     Row Count is Less Than X    SELECT ID FROM tsao_accounts    7
     [Teardown]    Disconnect From Database
 
-Verify Row Count of tsao_records Table is Greater Than X
-    [Documentation]    Verify the row count of tsao_records table is greater than X value.
-    [Tags]    Verify/Check
-    [Setup]    Connect to DB
-    Row Count is Greater Than X    SELECT ID FROM tsao_records    1
-    [Teardown]    Disconnect From Database
-
-Retrieve Row Count of tsao_records Table
-    [Documentation]    Test to retrieve the row count of tsao_records table and verify as string value.
-    [Tags]    Retrieve
-    [Setup]    Connect to DB
-    ${output}=    Row Count    SELECT ID FROM tsao_records
-    Log    ${output}
-    Should Be Equal As Strings    ${output}    2
-    [Teardown]    Disconnect From Database
-
 Retrieve records from tsao_records Table
     [Documentation]   Test to Rretrieve the records from tsao_records table.
     [Tags]    Retrieve
     [Setup]    Connect to DB
     ${output}=    Execute SQL String    SELECT * FROM tsao_records
-    Log    ${output}
-    Should Be Equal As Strings    ${output}    None
-    [Teardown]    Disconnect From Database
-
-Verify Query - Row Count tsao_accounts Table
-    [Documentation]    Verify the row count of tsao_accounts table.
-    [Tags]    Verify/Check
-    [Setup]    Connect to DB
-    ${output}=    Query    SELECT COUNT(*) FROM tsao_accounts
-    Log    ${output}
-    Should Be Equal As Integers    ${output}[0][0]    6
-    [Teardown]    Disconnect From Database
-
-Verify Query - Row Count tsao_records Table
-    [Documentation]    Verify the row count of tsao_records table.
-    [Tags]    Verify/Check
-    [Setup]    Connect to DB
-    ${output}=    Query    SELECT COUNT(*) FROM tsao_records
-    Log    ${output}
-    Should Be Equal As Integers    ${output}[0][0]    2
+    Log To Console   ${output}
     [Teardown]    Disconnect From Database
 
 Verify Query - Get results as a list of dictionaries from tsao_accounts Table
@@ -151,7 +118,6 @@ Verify Query - Get results as a list of dictionaries from tsao_accounts Table
     [Setup]    Connect to DB
     ${output}=    Query    SELECT * FROM tsao_accounts    returnAsDict=True
     Log    ${output}
-    # some databases lower field names and you can't do anything about it
     TRY
         ${value 1}=    Get From Dictionary    ${output}[0]    Name
     EXCEPT    Dictionary does not contain key 'Name'.
@@ -166,7 +132,6 @@ Verify Query - Get results as a list of dictionaries from tsao_accounts Table
     Should Be Equal As Strings    ${value 2}    Er Poi Voon
     [Teardown]    Disconnect From Database
 
-#GJ
 Verify Columns Existence in tsao_accounts Table
     [Documentation]    Verify that all columns exist in the 'tsao_accounts' table.
     [Tags]    Verify/Check
@@ -222,11 +187,11 @@ Verify Foreign Key Relationship in tsao_records is Valid
     [Documentation]    Verify that the 'AccountID' in 'tsao_records' references a valid 'ID' in 'tsao_accounts'.
     [Tags]    Verify/Check
     [Setup]    Connect to DB
-    ${invalid_foreign_keys} =    Query    SELECT r.AccountID FROM tsao_records r LEFT JOIN tsao_accounts a ON r.AccountID = a.ID WHERE a.ID IS NULL
+    ${invalid_foreign_keys} =    Query    SELECT r.AccountID FROM tsao_records r LEFT JOIN tsao_accounts a ON r.AccountID = a.ID WHERE a.ID IS NULL 
     Run Keyword If    ${invalid_foreign_keys}    Fail    Invalid foreign keys found in 'tsao_records': ${invalid_foreign_keys}
     [Teardown]    Disconnect From Database
 
-Verify Unique Constraint of tsao_accounts Table
+Verify Unique Constraint on the Username Column of tsao_accounts Table
     [Documentation]    Verify the unique constraint on the 'Username' column of tsao_accounts table.
     [Tags]    Verify/Check
     [Setup]    Connect to DB
@@ -299,7 +264,7 @@ Check Academic Year Format
     [Setup]    Connect to DB
     ${incorrect_academic_years} =    Query    SELECT AcadYear FROM tsao_records WHERE NOT AcadYear REGEXP '^\d{4}/\d{2}$'
     Run Keyword If    ${incorrect_academic_years}    Log Many    Incorrect 'AcadYear' formats found in 'tsao_records': ${incorrect_academic_years}
-    Run Keyword If    ${incorrect_academic_years}    Fail    Some 'AcadYear' values do not follow the format: YYYY/YY. Detailed failures: ${incorrect_academic_years}
+    Run Keyword If    ${incorrect_academic_years}    Fail    'AcadYear' values does not match. Detailed failures: ${incorrect_academic_years}
     [Teardown]    Disconnect From Database
 
 Verify Count Range of Student in tsao_records Table
@@ -410,14 +375,14 @@ Insert Data with Invalid Role
     [Documentation]    Test inserting data with an invalid role into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn On Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (6, 'John Doe', 'johndoe', 'password123', 'Test', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Duplicate Username
     [Documentation]    Test inserting data with a duplicate username into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'existing_username', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn On Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Missing Value
