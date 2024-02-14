@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.12.0 on win32)" generated="20240214 00:40:28.238" rpa="false" schemaversion="4">
+<suite id="s1" name="Tsao-Tests" source="C:\Users\chuag\tsao-tests">
+<suite id="s1-s1" name="Db" source="C:\Users\chuag\tsao-tests\db">
+<suite id="s1-s1-s1" name="Tests" source="C:\Users\chuag\tsao-tests\db\tests.robot">
+<test id="s1-s1-s1-t1" name="Insert Data with Duplicate Username" line="381">
+<kw name="Connect to DB" type="SETUP">
+<kw name="Connect To Database" library="DatabaseLibrary">
+<arg>pymysql</arg>
+<arg>${DB_NAME}</arg>
+<arg>${DB_USER}</arg>
+<arg>${DB_PASSWORD}</arg>
+<arg>127.0.0.1</arg>
+<arg>${DBPort}</arg>
+<doc>Loads the DB API 2.0 module given ``dbapiModuleName`` then uses it to
+connect to the database using provided parameters such as ``dbName``, ``dbUsername``, and ``dbPassword``.</doc>
+<msg timestamp="20240214 00:40:28.513" level="FAIL">Variable '${DB_NAME}' not found.</msg>
+<status status="FAIL" starttime="20240214 00:40:28.513" endtime="20240214 00:40:28.513"/>
+</kw>
+<status status="FAIL" starttime="20240214 00:40:28.513" endtime="20240214 00:40:28.513"/>
+</kw>
+<kw name="Disconnect From Database" library="DatabaseLibrary" type="TEARDOWN">
+<doc>Disconnects from the database.</doc>
+<msg timestamp="20240214 00:40:28.513" level="INFO">Executing : Disconnect From Database</msg>
+<msg timestamp="20240214 00:40:28.513" level="INFO">No open database connection to close</msg>
+<status status="PASS" starttime="20240214 00:40:28.513" endtime="20240214 00:40:28.513"/>
+</kw>
+<doc>Test inserting data with a duplicate username into 'tsao_accounts' table.</doc>
+<tag>Insert</tag>
+<status status="FAIL" starttime="20240214 00:40:28.513" endtime="20240214 00:40:28.513">Setup failed:
+Variable '${DB_NAME}' not found.</status>
+</test>
+<doc>Tests which work with the same input params across all databases.</doc>
+<status status="FAIL" starttime="20240214 00:40:28.271" endtime="20240214 00:40:28.528"/>
+</suite>
+<status status="FAIL" starttime="20240214 00:40:28.260" endtime="20240214 00:40:28.531"/>
+</suite>
+<status status="FAIL" starttime="20240214 00:40:28.243" endtime="20240214 00:40:28.532"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1" skip="0">Insert</stat>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Tsao-Tests">Tsao-Tests</stat>
+<stat pass="0" fail="1" skip="0" id="s1-s1" name="Db">Tsao-Tests.Db</stat>
+<stat pass="0" fail="1" skip="0" id="s1-s1-s1" name="Tests">Tsao-Tests.Db.Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
