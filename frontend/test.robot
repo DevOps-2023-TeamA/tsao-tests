@@ -433,6 +433,185 @@ Check Response When Admin Click on Delete Button and Cancel at Account Managemen
     Capture Page Screenshot
     [Teardown]  Close Browser
 
+#TBC
+Check Response When User Input Valid Data at Query Entry Page
+    [Documentation]    Verifies the response when user input valid data at query entry page.
+    [Tags]    Query Entry
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${user_username}
+    Input Password    ${user_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When User Click on Return Button at Query Result Page.
+    [Documentation]    Verifies the response when user click on return button at query result page.
+    [Tags]    Cancel
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${user_username}
+    Input Password    ${user_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="return"]
+    Wait Until Page Contains    Capstone Entry Query
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When User Input Invalid Data at Query Entry Page
+    [Documentation]    Verifies the response when user input invalid data at query entry page.
+    [Tags]    Query Entry
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${user_username}
+    Input Password    ${user_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    1234/12
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    zxc
+    Click Button    xpath://*[@id="search"]
+    Run Keyword And Return Status    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When User Click On Export After Selecting a Query at Query Result Page
+    [Documentation]    Verifies the response when user attempt to export query after selecting any query.
+    [Tags]    Export
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${user_username}
+    Input Password    ${user_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[1]/input
+    Click Element    xpath://*[@id="export"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When User Click On Export Without Selecting a Query at Query Result Page
+    [Documentation]    Verifies the response when user attempt to export query without selecting any query.
+    [Tags]    Query Entry
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${user_username}
+    Input Password    ${user_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="export"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Click On Modify Button and Overwrite With Valid Data at Query Result Selected Data Page
+    [Documentation]    Verifies the response when user attempt to modify query with valid data at query result selected data page.
+    [Tags]    Modify Query
+    [Setup]    Open Browser 
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]
+    Click Element    xpath://*[@id="name"]
+    Input Text    xpath://*[@id="name"]    Low KH
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[1]/div/div[2]/input
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input   5
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input    2023/24
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input    Overflow
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input    ZXC Pte Ltd
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input    Tan CC
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea    DevOps love me.
+    Click Button    xpath://*[@id="modify"]
+    Handle Alert    action=accept
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Click On Modify Button and Overwrite With Invalid Data at Query Result Selected Data Page
+    [Documentation]    Verifies the response when user attempt to modify query with invalid data at query result selected data page.
+    [Tags]    Modify Query
+    [Setup]    Open Browser   
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]
+    Click Element    xpath://*[@id="name"]
+    Clear Element Text    xpath://*[@id="name"]    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input   ZXC
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea    
+    Click Button    xpath://*[@id="modify"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
 *** Keywords ***
 Open Browser
     [Arguments]    ${browser}=chrome
