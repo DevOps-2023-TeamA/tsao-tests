@@ -4,3 +4,8 @@
 # Temporary folders
 tmp/
 temp/
+
+# Remove artefacts 
+log.html
+output.xml
+report.html
