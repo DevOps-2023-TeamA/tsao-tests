@@ -375,14 +375,14 @@ Insert Data with Invalid Role
     [Documentation]    Test inserting data with an invalid role into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn On Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (6, 'John Doe', 'johndoe', 'password123', 'Test', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn On Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (6, 'John', 'john', 'password123', 'Test', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Duplicate Username
     [Documentation]    Test inserting data with a duplicate username into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn On Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn On Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Missing Value
@@ -396,105 +396,105 @@ Insert Data with Invalid Creation Date
     [Documentation]    Test inserting data with an invalid creation date into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-13-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'jack', 'jackneo', 'password123', 'User', '2024-13-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid Role Value
     [Documentation]    Test inserting data with an invalid role value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Johnathan', 'JohnathanTan', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with NULL Username
     [Documentation]    Test inserting data with a NULL username into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', NULL, 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Wick', NULL, 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid Role Format
     [Documentation]    Test inserting data with an invalid role format into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRoleFormat', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Vincent', 'vincentTan', 'password123', 'InvalidRoleFormat', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Future Creation Date
     [Documentation]    Test inserting data with a future creation date into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2124-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Ahboon', 'BoonKim', 'password123', 'User', '2124-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Non-Boolean IsApproved Value
     [Documentation]    Test inserting data with a non-boolean IsApproved value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'AhGua', 'GuaGua', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid Password Format
     [Documentation]    Test inserting data with an invalid password format into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'pass', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'AhBoy', 'BoyBoy', 'pass', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
     
 Insert Data with Invalid Creation Date Format
     [Documentation]    Test inserting data with an invalid creation date format into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-013-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'AhChicken', 'Chicken', 'password123', 'User', '2024-013-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Null Role
     [Documentation]    Test inserting data with a NULL role value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', NULL, '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure   Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Diana', 'DianaTan', 'password123', NULL, '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid IsApproved Value
     [Documentation]    Test inserting data with an invalid IsApproved value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Chirsty', 'ChirstyTee', 'password123', 'User', '2024-01-22 12:34:56', 'Yes', false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid IsDeleted Value
     [Documentation]    Test inserting data with an invalid IsDeleted value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, 'InvalidValue')
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'AhPok', 'PokYou', 'password123', 'User', '2024-01-22 12:34:56', true, 'InvalidValue')
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid Data Type
     [Documentation]    Test inserting data with an invalid data type into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES ('7', 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES ('7', 'AhGay', 'GayGay', 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Duplicate ID
     [Documentation]    Test inserting data with a duplicate ID into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (1, 'John Doe', 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =     Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (1, 'TryMe', 'MeIsCute', 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
-Insert Data with Null Value for Required Field
-    [Documentation]    Test inserting data with a NULL value for a required field into 'tsao_accounts' table.
+Insert Data with Null Value for Required Field 
+    [Documentation]    Test inserting data with a NULL value for a required field into 'tsao_accounts' table for 'Name'.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =    Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, NULL, 'johndoe', 'password123', 'User', '2024-01-22 12:34:56', true, false)
+    ${result} =    Run Keyword And Warn ON Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, NULL, 'Asher', 'password123', 'User', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Invalid Enum Value
     [Documentation]    Test inserting data with an invalid enum value into 'tsao_accounts' table.
     [Tags]    Insert
     [Setup]    Connect to DB
-    ${result} =    Run Keyword And Warn On Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'John Doe', 'johndoe', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
+    ${result} =    Run Keyword And Warn On Failure    Execute SQL String    INSERT INTO tsao_accounts (ID, Name, Username, Password, Role, CreationDate, IsApproved, IsDeleted) VALUES (7, 'Michelle', 'michelle', 'password123', 'InvalidRole', '2024-01-22 12:34:56', true, false)
     [Teardown]    Disconnect From Database
 
 Insert Data with Non-Unique Index Violation
