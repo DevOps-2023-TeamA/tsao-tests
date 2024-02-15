@@ -285,28 +285,6 @@ Check Response When User Click on Cancel Button at Create New Entry Page
     Capture Page Screenshot
     [Teardown]  Close Browser
 
-Check Response When Admin Attempt to Modify Account Details With Valid Details
-    [Documentation]    Verifies the response when admin making valid changes on specific account details.
-    [Tags]    Modify Account 
-    [Setup]    Open Browser
-    Go To Site  
-    Input Username    ${admin_username}
-    Input Password    ${admin_password}
-    Submit Login
-    Handle Alert    action=accept
-    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
-    Click Element    xpath://*[@id="roleButtons"]/a[2]
-    Click Element    xpath://*[@id="accountsTable"]/tr[2]/td[7]/button[1]
-    Click Element    xpath://*[@id="name"]
-    Input Text    xpath://*[@id="name"]    CZY
-    Click Element    xpath://*[@id="username"]
-    Input Text    xpath://*[@id="username"]    YouYou
-    Click Button    xpath://*[@id="role"]
-    Click Element    xpath://*[@id="layout-wrapper"]/div/div/div/div[2]/div/div/div[1]/form/div[3]/div/div/a[1]
-    Click Button    xpath://*[@id="editAccButton"]
-    Capture Page Screenshot
-    [Teardown]  Close Browser
-
 Check Response When Admin Attempt to Modify Account With Invalid Details
     [Documentation]    Verifies the response when admin making invalid changes on specific account details.
     [Tags]    Modify Account 
@@ -320,7 +298,7 @@ Check Response When Admin Attempt to Modify Account With Invalid Details
     Click Element    xpath://*[@id="roleButtons"]/a[2]
     Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[1]
     Click Element    xpath://*[@id="name"]
-    Input Text    xpath://*[@id="name"]    ${null}
+    Clear Element Text    xpath://*[@id="name"]
     Click Element    xpath://*[@id="username"]
     Input Text    xpath://*[@id="username"]    lkh2
     Click Button    xpath://*[@id="editAccButton"]
@@ -344,10 +322,10 @@ Check Response When Admin Click Cancel Button at Account Management Page
     Capture Page Screenshot
     [Teardown]  Close Browser
 
-Check Response When Admin Attempt to Modify Account Password With Valid Details
-    [Documentation]    Verifies the response when admin making valid changes on specific account password.
+Check Response When Admin Attempt to Modify Account Password With Invalid Input
+    [Documentation]    Verifies the response when admin making invalid changes on specific account password.
     [Tags]    Modify Account 
-    [Setup]    Open Browser
+    [Setup]    Open Browser   
     Go To Site  
     Input Username    ${admin_username}
     Input Password    ${admin_password}
@@ -358,26 +336,6 @@ Check Response When Admin Attempt to Modify Account Password With Valid Details
     Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[2]
     Click Element    xpath://*[@id="password1"]
     Input Text    xpath://*[@id="password1"]    Pa$$w0rd
-    Click Element    xpath://*[@id="password2"]
-    Input Text    xpath://*[@id="password2"]    Pa$$w0rd
-    Click Button    xpath://*[@id="changePasswordButton"]
-    Capture Page Screenshot
-    [Teardown]  Close Browser
-
-Check Response When Admin Attempt to Modify Account Password With Invalid Input
-    [Documentation]    Verifies the response when admin making invalid changes on specific account password.
-    [Tags]    Modify Account 
-    [Setup]    Open Browser   
-    Go To Site
-    Input Username    ${admin_username}
-    Input Password    ${admin_password}
-    Submit Login
-    Handle Alert    action=accept
-    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
-    Click Element    xpath://*[@id="roleButtons"]/a[2]
-    Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[2]
-    Click Element    xpath://*[@id="password1"]
-    Input Text    xpath://*[@id="password1"]    Pa$$W0rd
     Click Element    xpath://*[@id="password2"]
     Input Text    xpath://*[@id="password2"]    1234
     Click Button    xpath://*[@id="changePasswordButton"]
@@ -401,22 +359,6 @@ Check Response When Admin Click on Cancel Button at Change Account Password Page
     Capture Page Screenshot
     [Teardown]  Close Browser
 
-Check Response When Admin Click on Delete Button and Confirm at Account Management Page
-    [Documentation]    Verifies the response when admin click on delete button and confirm at account management page.
-    [Tags]    Delete Account
-    [Setup]    Open Browser   
-    Go To Site
-    Input Username    ${admin_username}
-    Input Password    ${admin_password}
-    Submit Login
-    Handle Alert    action=accept
-    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
-    Click Element    xpath://*[@id="roleButtons"]/a[2]
-    Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[3]
-    Click Element    xpath:/html/body/div[2]/div/div[6]/button[1]
-    Capture Page Screenshot
-    [Teardown]  Close Browser
-
 Check Response When Admin Click on Delete Button and Cancel at Account Management Page
     [Documentation]    Verifies the response when admin click on delete button and cancel at account management page.
     [Tags]    Delete Account
@@ -433,7 +375,6 @@ Check Response When Admin Click on Delete Button and Cancel at Account Managemen
     Capture Page Screenshot
     [Teardown]  Close Browser
 
-#TBC
 Check Response When User Input Valid Data at Query Entry Page
     [Documentation]    Verifies the response when user input valid data at query entry page.
     [Tags]    Query Entry
@@ -538,8 +479,44 @@ Check Response When User Click On Export Without Selecting a Query at Query Resu
     Capture Page Screenshot
     [Teardown]  Close Browser
 
+Check Response When Admin Click On Modify Button and Overwrite With Invalid Data at Query Result Selected Data Page
+    [Documentation]    Verifies the response when admin attempt to modify query with invalid data at query result selected data page.
+    [Tags]    Modify Query
+    [Setup]    Open Browser   
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Quantum
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]
+    Click Element    xpath://*[@id="name"]
+    Clear Element Text    xpath://*[@id="name"]    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input
+    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input   ZXC
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input    
+    Click Element    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea
+    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea    
+    Click Button    xpath://*[@id="modify"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
 Check Response When Admin Click On Modify Button and Overwrite With Valid Data at Query Result Selected Data Page
-    [Documentation]    Verifies the response when user attempt to modify query with valid data at query result selected data page.
+    [Documentation]    Verifies the response when admin attempt to modify query with valid data at query result selected data page.
     [Tags]    Modify Query
     [Setup]    Open Browser 
     Go To Site  
@@ -576,9 +553,9 @@ Check Response When Admin Click On Modify Button and Overwrite With Valid Data a
     Capture Page Screenshot
     [Teardown]  Close Browser
 
-Check Response When Admin Click On Modify Button and Overwrite With Invalid Data at Query Result Selected Data Page
-    [Documentation]    Verifies the response when user attempt to modify query with invalid data at query result selected data page.
-    [Tags]    Modify Query
+Check Response When Admin Click On Cancel Button at Query Result Selected Data Page
+    [Documentation]    Verifies the response when admin click cancel button at query result selected data page.
+    [Tags]    Cancel
     [Setup]    Open Browser   
     Go To Site  
     Input Username    ${admin_username}
@@ -590,25 +567,118 @@ Check Response When Admin Click On Modify Button and Overwrite With Invalid Data
     Click Element    xpath://*[@id="year"]
     Input Text    xpath://*[@id="year"]    2023/24
     Click Element    xpath://*[@id="keyword"]
-    Input Text    xpath://*[@id="keyword"]    Quantum
+    Input Text    xpath://*[@id="keyword"]    TSAO
     Click Button    xpath://*[@id="search"]
     Wait Until Page Contains    Query Results
-    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2] 
+    Click Element    xpath://*[@id="cancel"]
+    Wait Until Page Contains    Query Results
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Click On Delete Button then No at Query Result Selected Data Page
+    [Documentation]    Verifies the response when admin attempt to delete query and choose no at query result selected data page.
+    [Tags]    Delete Query
+    [Setup]    Open Browser   
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    TSAO
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]  
+    Click Element    xpath://*[@id="delete"]
+    Click Element    xpath:/html/body/div[2]/div/div[3]/button[3]
+    Wait Until Page Contains    Query Results
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Click On Delete Button then Yes at Query Result Selected Data Page
+    [Documentation]    Verifies the response when admin attempt to delete query and choose yes at query result selected data page.
+    [Tags]    Delete Query
+    [Setup]    Open Browser   
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[3]
+    Click Element    xpath://*[@id="year"]
+    Input Text    xpath://*[@id="year"]    2023/24
+    Click Element    xpath://*[@id="keyword"]
+    Input Text    xpath://*[@id="keyword"]    Gen
+    Click Button    xpath://*[@id="search"]
+    Wait Until Page Contains    Query Results
+    Click Element    xpath://*[@id="entryTableBody"]/tr/td[2]  
+    Click Element    xpath://*[@id="delete"]
+    Click Element    xpath:/html/body/div[2]/div/div[3]/button[1]
+    Wait Until Page Contains    Query Results
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Attempt to Modify Account Details With Valid Details
+    [Documentation]    Verifies the response when admin making valid changes on specific account details.
+    [Tags]    Modify Account 
+    [Setup]    Open Browser
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="accountsTable"]/tr[3]/td[7]/button[1]
     Click Element    xpath://*[@id="name"]
-    Clear Element Text    xpath://*[@id="name"]    
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input
-    Input Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[1]/input   ZXC
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
-    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[1]/div/div/div[2]/div[2]/div[2]/input
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input
-    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[1]/div/div/input    
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input
-    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[2]/div/div/input    
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input
-    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[1]/div[2]/div[3]/div/div/input    
-    Click Element    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea
-    Clear Element Text    xpath://*[@id="entryForm"]/div/div/div[2]/div/textarea    
-    Click Button    xpath://*[@id="modify"]
+    Input Text    xpath://*[@id="name"]    CZY
+    Click Element    xpath://*[@id="username"]
+    Input Text    xpath://*[@id="username"]    YouYou
+    Click Button    xpath://*[@id="role"]
+    Click Element    xpath://*[@id="layout-wrapper"]/div/div/div/div[2]/div/div/div[1]/form/div[3]/div/div/a[1]
+    Click Button    xpath://*[@id="editAccButton"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Attempt to Modify Account Password With Valid Details
+    [Documentation]    Verifies the response when admin making valid changes on specific account password.
+    [Tags]    Modify Account 
+    [Setup]    Open Browser
+    Go To Site  
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[2]
+    Click Element    xpath://*[@id="password1"]
+    Input Text    xpath://*[@id="password1"]    Pa$$w0rd
+    Click Element    xpath://*[@id="password2"]
+    Input Text    xpath://*[@id="password2"]    Pa$$w0rd
+    Click Button    xpath://*[@id="changePasswordButton"]
+    Capture Page Screenshot
+    [Teardown]  Close Browser
+
+Check Response When Admin Click on Delete Button and Confirm at Account Management Page
+    [Documentation]    Verifies the response when admin click on delete button and confirm at account management page.
+    [Tags]    Delete Account
+    [Setup]    Open Browser   
+    Go To Site
+    Input Username    ${admin_username}
+    Input Password    ${admin_password}
+    Submit Login
+    Handle Alert    action=accept
+    Wait Until Page Contains    Welcome to the TSAO Capstone Records System
+    Click Element    xpath://*[@id="roleButtons"]/a[2]
+    Click Element    xpath://*[@id="accountsTable"]/tr[1]/td[7]/button[3]
+    Click Element    xpath:/html/body/div[2]/div/div[6]/button[1]
     Capture Page Screenshot
     [Teardown]  Close Browser
 
