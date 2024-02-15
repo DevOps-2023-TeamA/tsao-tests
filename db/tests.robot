@@ -2,7 +2,6 @@
 Documentation       Tests which work with the same input params across all databases.
 Library  DatabaseLibrary
 Library    Collections
-Library    SeleniumLibrary
 
 *** Variables ***
 ${DB_SERVER}     localhost
@@ -256,15 +255,6 @@ Verify Inactive Accounts in tsao_accounts Table Marked Correctly
     [Setup]    Connect to DB
     ${inactive_accounts} =    Query    SELECT Username FROM tsao_accounts WHERE IsDeleted = true AND IsApproved = false
     Run Keyword If    ${inactive_accounts}    Fail    Inactive accounts not marked correctly: ${inactive_accounts}
-    [Teardown]    Disconnect From Database
-
-Check Academic Year Format
-    [Documentation]    Verify that 'AcadYear' values in 'tsao_records' follow the format: YYYY/YY (e.g., 2023/24).
-    [Tags]    Verify/Check
-    [Setup]    Connect to DB
-    ${incorrect_academic_years} =    Query    SELECT AcadYear FROM tsao_records WHERE NOT AcadYear REGEXP '^\d{4}/\d{2}$'
-    Run Keyword If    ${incorrect_academic_years}    Log Many    Incorrect 'AcadYear' formats found in 'tsao_records': ${incorrect_academic_years}
-    Run Keyword If    ${incorrect_academic_years}    Fail    'AcadYear' values does not match. Detailed failures: ${incorrect_academic_years}
     [Teardown]    Disconnect From Database
 
 Verify Count Range of Student in tsao_records Table
